@@ -29,4 +29,4 @@ build/
 
 ### VS Code ###
 .vscode/
-将删除 .mvn/
+.mvn/
