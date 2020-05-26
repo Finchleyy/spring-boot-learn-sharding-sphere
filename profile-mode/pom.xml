@@ -37,11 +37,11 @@
             <artifactId>mysql-connector-java</artifactId>
             <!--            <scope>runtime</scope>-->
         </dependency>
-        <!--<dependency>
+        <dependency>
             <groupId>org.apache.shardingsphere</groupId>
             <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
             <version>${sharding-sphere.version}</version>
-        </dependency>-->
+        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
