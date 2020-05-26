@@ -1,6 +1,7 @@
 package com.ypw.springbootlearnshardingsphere.entity;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -11,6 +12,7 @@ import java.io.Serializable;
  * @since 2020-05-25 15:29:45
  */
 @Data
+@Accessors(chain = true)
 public class OrderItem implements Serializable {
     private static final long serialVersionUID = 387240767721952354L;
 
@@ -19,5 +21,7 @@ public class OrderItem implements Serializable {
     private String item;
 
     private Long userId;
+
+    private Long orderItemId;
 
 }

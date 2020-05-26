@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ypw.springbootlearnshardingsphere.mapper.OrderItemMapper">
+  <resultMap id="BaseResultMap" type="com.ypw.springbootlearnshardingsphere.entity.OrderItem">
+    <id column="order_item_id" jdbcType="BIGINT" property="orderItemId" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="item" jdbcType="VARCHAR" property="item" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    order_item_id, order_id, item, user_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_order_item
+    where order_item_id = #{orderItemId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_order_item
+    where order_item_id = #{orderItemId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="order_item_id" keyProperty="orderItemId" parameterType="com.ypw.springbootlearnshardingsphere.entity.OrderItem" useGeneratedKeys="true">
+    insert into t_order_item (order_id, item, user_id
+      )
+    values (#{orderId,jdbcType=BIGINT}, #{item,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="order_item_id" keyProperty="orderItemId" parameterType="com.ypw.springbootlearnshardingsphere.entity.OrderItem" useGeneratedKeys="true">
+    insert into t_order_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="item != null">
+        item,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="item != null">
+        #{item,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ypw.springbootlearnshardingsphere.entity.OrderItem">
+    update t_order_item
+    <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="item != null">
+        item = #{item,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where order_item_id = #{orderItemId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ypw.springbootlearnshardingsphere.entity.OrderItem">
+    update t_order_item
+    set order_id = #{orderId,jdbcType=BIGINT},
+      item = #{item,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=BIGINT}
+    where order_item_id = #{orderItemId,jdbcType=BIGINT}
+  </update>
+</mapper>

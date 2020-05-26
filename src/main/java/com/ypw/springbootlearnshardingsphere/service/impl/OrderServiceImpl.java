@@ -17,7 +17,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public String saveOrder(Order order) {
-        int result = orderMapper.insert(order);
-        return result + "";
+        //int result = orderMapper.insert(order);
+        int i = orderMapper.insertSelective(order);
+        return order.getOrderId().toString();
     }
 }

@@ -1,7 +1,7 @@
 package com.ypw.springbootlearnshardingsphere.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -12,7 +12,8 @@ import java.io.Serializable;
  * @since 2020-05-25 15:29:35
  */
 @Data
-@TableName("t_order")
+@Accessors(chain = true)
+//@TableName("t_order")
 public class Order implements Serializable {
     private static final long serialVersionUID = 573068993750125730L;
 
