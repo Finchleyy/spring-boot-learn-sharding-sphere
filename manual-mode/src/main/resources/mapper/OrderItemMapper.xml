@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ypw.shardingsphere.profile.mapper.OrderItemMapper">
-  <resultMap id="BaseResultMap" type="com.ypw.shardingsphere.profile.entity.OrderItem">
+<mapper namespace="com.ypw.shardingsphere.manual.mapper.OrderItemMapper">
+  <resultMap id="BaseResultMap" type="com.ypw.shardingsphere.manual.entity.OrderItem">
     <id column="order_item_id" jdbcType="BIGINT" property="orderItemId" />
     <result column="order_id" jdbcType="BIGINT" property="orderId" />
     <result column="item" jdbcType="VARCHAR" property="item" />
@@ -20,13 +20,13 @@
     delete from t_order_item
     where order_item_id = #{orderItemId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" keyColumn="order_item_id" keyProperty="orderItemId" parameterType="com.ypw.shardingsphere.profile.entity.OrderItem" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="order_item_id" keyProperty="orderItemId" parameterType="com.ypw.shardingsphere.manual.entity.OrderItem" useGeneratedKeys="true">
     insert into t_order_item (order_id, item, user_id
       )
     values (#{orderId,jdbcType=BIGINT}, #{item,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT}
       )
   </insert>
-  <insert id="insertSelective" keyColumn="order_item_id" keyProperty="orderItemId" parameterType="com.ypw.shardingsphere.profile.entity.OrderItem" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="order_item_id" keyProperty="orderItemId" parameterType="com.ypw.shardingsphere.manual.entity.OrderItem" useGeneratedKeys="true">
     insert into t_order_item
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="orderId != null">
@@ -51,7 +51,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ypw.shardingsphere.profile.entity.OrderItem">
+  <update id="updateByPrimaryKeySelective" parameterType="com.ypw.shardingsphere.manual.entity.OrderItem">
     update t_order_item
     <set>
       <if test="orderId != null">
@@ -66,7 +66,7 @@
     </set>
     where order_item_id = #{orderItemId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ypw.shardingsphere.profile.entity.OrderItem">
+  <update id="updateByPrimaryKey" parameterType="com.ypw.shardingsphere.manual.entity.OrderItem">
     update t_order_item
     set order_id = #{orderId,jdbcType=BIGINT},
       item = #{item,jdbcType=VARCHAR},

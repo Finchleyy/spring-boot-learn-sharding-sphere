@@ -26,7 +26,7 @@ public class SpringBootLearnShardingSphereApplicationTests {
 
     @Test
     public void contextLoads() {
-        for (int i = 20101; i < 20200; i++) {
+        for (int i = 1; i < 3; i++) {
             Order order = new Order().setName("订单" + i).setUserId((long) i);
             orderService.saveOrder(order);
             System.out.println(order.getOrderId());
