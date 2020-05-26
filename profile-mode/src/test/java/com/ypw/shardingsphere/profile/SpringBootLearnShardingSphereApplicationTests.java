@@ -1,11 +1,15 @@
 package com.ypw.shardingsphere.profile;
 
 
+import com.ypw.shardingsphere.profile.entity.Order;
+import com.ypw.shardingsphere.profile.entity.OrderItem;
+import com.ypw.shardingsphere.profile.mapper.OrderItemMapper;
+import com.ypw.shardingsphere.profile.mapper.SelectMapper;
+import com.ypw.shardingsphere.profile.service.OrderService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.annotation.Order;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;

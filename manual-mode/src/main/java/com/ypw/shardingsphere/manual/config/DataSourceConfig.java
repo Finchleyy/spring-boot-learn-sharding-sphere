@@ -5,16 +5,15 @@ import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.google.common.collect.Lists;
+import io.shardingsphere.api.config.rule.ShardingRuleConfiguration;
+import io.shardingsphere.api.config.rule.TableRuleConfiguration;
+import io.shardingsphere.api.config.strategy.InlineShardingStrategyConfiguration;
+import io.shardingsphere.api.config.strategy.StandardShardingStrategyConfiguration;
+import io.shardingsphere.shardingjdbc.api.ShardingDataSourceFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.shardingsphere.api.config.sharding.KeyGeneratorConfiguration;
-import org.apache.shardingsphere.api.config.sharding.ShardingRuleConfiguration;
-import org.apache.shardingsphere.api.config.sharding.TableRuleConfiguration;
-import org.apache.shardingsphere.api.config.sharding.strategy.InlineShardingStrategyConfiguration;
-import org.apache.shardingsphere.shardingjdbc.api.ShardingDataSourceFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -31,11 +30,11 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Configuration
 @EnableConfigurationProperties({FirstDsProp.class, SecondDsProp.class})
 @EnableTransactionManagement(proxyTargetClass = true)
-@MapperScan(basePackages = "com.ypw.shardingsphere.manual.mapper", sqlSessionTemplateRef = "sqlSessionTemplate")
 @Slf4j
 public class DataSourceConfig {
 
@@ -138,7 +137,7 @@ public class DataSourceConfig {
         Properties p = new Properties();
         p.setProperty("sql.show", Boolean.TRUE.toString());
         // 获取数据源对象
-        DataSource dataSource = ShardingDataSourceFactory.createDataSource(dataSourceMap, shardingRuleConfig, p);
+        DataSource dataSource = ShardingDataSourceFactory.createDataSource(dataSourceMap, shardingRuleConfig, new ConcurrentHashMap<>(), p);
         return dataSource;
     }
 
@@ -158,7 +157,7 @@ public class DataSourceConfig {
     public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mappers/*.xml"));
+        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath*:mapper/*.xml"));
         return bean.getObject();
     }
 
@@ -191,18 +190,22 @@ public class DataSourceConfig {
     }*/
 
     private TableRuleConfiguration orderRuleConfig() {
-        TableRuleConfiguration tableRuleConfig = new TableRuleConfiguration("t_order", "ds${0..1}.t_order_${0..1}");
-        KeyGeneratorConfiguration keyGeneratorConfiguration = new KeyGeneratorConfiguration("SNOWFLAKE", "order_id");
-        tableRuleConfig.setKeyGeneratorConfig(keyGeneratorConfiguration);
+        TableRuleConfiguration tableRuleConfig = new TableRuleConfiguration();
+        tableRuleConfig.setLogicTable("t_order");
+        tableRuleConfig.setActualDataNodes("ds${0..1}.t_order_${0..1}");
+        tableRuleConfig.setKeyGeneratorColumnName("order_id");
+        tableRuleConfig.setKeyGenerator(new SnowflakeShardingKeyGenerator(0L, 1L));
         //tableRuleConfig.setDatabaseShardingStrategyConfig(new StandardShardingStrategyConfiguration("user_id", new IdShardingAlgorithm(), new IdShardingAlgorithm()));
         tableRuleConfig.setTableShardingStrategyConfig(new InlineShardingStrategyConfiguration("order_id", "t_order$->{order_id % 2}"));
         return tableRuleConfig;
     }
 
     private TableRuleConfiguration orderItemRuleConfig() {
-        TableRuleConfiguration tableRuleConfig = new TableRuleConfiguration("t_order_item", "ds${0..1}.t_order_item_${0..1}");
-        KeyGeneratorConfiguration keyGeneratorConfiguration = new KeyGeneratorConfiguration("SNOWFLAKE", "order_item_id");
-        tableRuleConfig.setKeyGeneratorConfig(keyGeneratorConfiguration);
+        TableRuleConfiguration tableRuleConfig = new TableRuleConfiguration();
+        tableRuleConfig.setLogicTable("t_order_item");
+        tableRuleConfig.setActualDataNodes("ds${0..1}.t_order_item_${0..1}");
+        tableRuleConfig.setKeyGeneratorColumnName("order_item_id");
+        tableRuleConfig.setKeyGenerator(new SnowflakeShardingKeyGenerator(0L, 2L));
         //tableRuleConfig.setDatabaseShardingStrategyConfig(new StandardShardingStrategyConfiguration("user_id", new IdShardingAlgorithm(), new IdShardingAlgorithm()));
         tableRuleConfig.setTableShardingStrategyConfig(new InlineShardingStrategyConfiguration("order_item_id", "t_order_item$->{order_item_id % 2}"));
         return tableRuleConfig;
