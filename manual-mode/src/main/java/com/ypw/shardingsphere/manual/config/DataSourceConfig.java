@@ -53,7 +53,7 @@ public class DataSourceConfig {
         dsMap.put("password", firstDSProp.getPassword());
 
         DruidDataSource ds = (DruidDataSource) buildDataSource(dsMap);
-        ds.setProxyFilters(Lists.newArrayList(statFilter()));
+//        ds.setProxyFilters(Lists.newArrayList(statFilter()));
         // 每个分区最大的连接数
         ds.setMaxActive(20);
         // 每个分区最小的连接数
