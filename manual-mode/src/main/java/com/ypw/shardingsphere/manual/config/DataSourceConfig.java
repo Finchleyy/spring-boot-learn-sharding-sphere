@@ -8,7 +8,6 @@ import com.google.common.collect.Lists;
 import io.shardingsphere.api.config.rule.ShardingRuleConfiguration;
 import io.shardingsphere.api.config.rule.TableRuleConfiguration;
 import io.shardingsphere.api.config.strategy.InlineShardingStrategyConfiguration;
-import io.shardingsphere.api.config.strategy.StandardShardingStrategyConfiguration;
 import io.shardingsphere.shardingjdbc.api.ShardingDataSourceFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -158,6 +157,8 @@ public class DataSourceConfig {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
         bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath*:mapper/*.xml"));
+        //设置配置文件
+        //bean.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
         return bean.getObject();
     }
 
@@ -197,6 +198,8 @@ public class DataSourceConfig {
         tableRuleConfig.setKeyGenerator(new SnowflakeShardingKeyGenerator(0L, 1L));
         //tableRuleConfig.setDatabaseShardingStrategyConfig(new StandardShardingStrategyConfiguration("user_id", new IdShardingAlgorithm(), new IdShardingAlgorithm()));
         tableRuleConfig.setTableShardingStrategyConfig(new InlineShardingStrategyConfiguration("order_id", "t_order$->{order_id % 2}"));
+        //分表策略，缺省表示使用默认分表策略
+        //tableRuleConfig.setTableShardingStrategyConfig(new StandardShardingStrategyConfiguration("order_id", orderIdShardingAlgorithm));
         return tableRuleConfig;
     }
 
@@ -216,13 +219,13 @@ public class DataSourceConfig {
         Object type = dataSourceMap.get("type");
         try {
             Class<? extends DataSource> dataSourceType;
-            dataSourceType = (Class<? extends DataSource>) Class.forName((String) type);
+            //dataSourceType = (Class<? extends DataSource>) Class.forName((String) type);
             //String driverClassName = dataSourceMap.get("driver").toString();
             String url = dataSourceMap.get("url").toString();
             String username = dataSourceMap.get("username").toString();
             String password = dataSourceMap.get("password").toString();
             // 自定义DataSource配置
-            DataSourceBuilder factory = DataSourceBuilder.create().url(url).username(username).password(password).type(dataSourceType);
+            DataSourceBuilder factory = DataSourceBuilder.create().url(url).username(username).password(password);
             return factory.build();
         } catch (Exception e) {
             log.error("构建数据源" + type + "出错", e);
