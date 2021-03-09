@@ -1,7 +1,7 @@
 package com.ypw.shardingsphere.manual.config;
- 
+
 import io.shardingsphere.core.keygen.KeyGenerator;
- 
+
 import java.util.Random;
  
 public final class SnowflakeShardingKeyGenerator implements KeyGenerator {
@@ -161,7 +161,7 @@ public final class SnowflakeShardingKeyGenerator implements KeyGenerator {
     public static void main(String[] args) {
         SnowflakeShardingKeyGenerator generator = new SnowflakeShardingKeyGenerator(0,0);
         for (int i = 0; i < 20; i++) {
-            System.out.println(generator.generateKey());
+            System.out.println(i + "=======>" + generator.generateKey());
         }
     }
 }

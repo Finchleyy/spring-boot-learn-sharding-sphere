@@ -1,6 +1,6 @@
 package com.ypw.shardingsphere.manual;
 
-import com.ypw.springbootlearnstarter.config.YpwBean;
+/*import com.ypw.springbootlearnstarter.config.YpwBean;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,4 +17,4 @@ public class BaseTest {
     public void getBean() {
         System.out.println(ypwBean.getName());
     }
-}
+}*/
